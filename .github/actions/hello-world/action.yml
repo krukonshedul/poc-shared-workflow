@@ -1,0 +1,13 @@
+name: hello-world
+description: Prints a repo-specific greeting
+outputs:
+  greeting:
+    value: ${{ steps.greet.outputs.greeting }}
+runs:
+  using: composite
+  steps:
+    - id: greet
+      shell: bash
+      run: |
+        echo "SHARED REPO ACTION (wrong one)"
+        echo "greeting=SHARED REPO ACTION (wrong one)" >> "$GITHUB_OUTPUT"

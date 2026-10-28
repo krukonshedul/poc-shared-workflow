@@ -1,0 +1,23 @@
+name: shared
+on:
+  workflow_call:
+    inputs:
+      expected:
+        type: string
+        required: true
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - id: hello
+        if: hashFiles('.github/actions/hello-world/action.yml') != ''
+        uses: ./.github/actions/hello-world
+      - shell: bash
+        env:
+          GOT: ${{ steps.hello.outputs.greeting }}
+          EXPECTED: ${{ inputs.expected }}
+        run: |
+          echo "repository=$GITHUB_REPOSITORY workflow_ref=$GITHUB_WORKFLOW_REF"
+          echo "got='$GOT' expected='$EXPECTED'"
+          [ "$GOT" = "$EXPECTED" ]
